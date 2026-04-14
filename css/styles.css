@@ -1,0 +1,397 @@
+/* =========================================
+   VARIABLES & SETUP
+========================================= */
+:root {
+    /* Color Palette */
+    --bg-navy: #050E18; /* Deep IIAC-like navy */
+    --bg-grey: #121822; /* Darker grey */
+    --accent-sky: #42A5F5; /* A bit more professional bright blue */
+    --accent-glow: rgba(66, 165, 245, 0.4);
+    --text-primary: #F3F6F9;
+    --text-muted: #A3B1C6;
+    --card-bg: rgba(18, 24, 34, 0.55);
+    /* 1px glassmorphism border colors */
+    --card-border-top: rgba(255, 255, 255, 0.2);
+    --card-border-bottom: rgba(66, 165, 245, 0.2);
+    --terminal-bg: #0C0F15;
+    
+    /* Typography */
+    --font-main: 'Pretendard', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+
+    /* Transitions */
+    --transition-fast: 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+    --transition-smooth: 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+}
+
+body {
+    font-family: var(--font-main);
+    color: var(--text-primary);
+    line-height: 1.7;
+    background: radial-gradient(circle at 60% -20%, #0d2847 0%, var(--bg-navy) 60%);
+    overflow-x: hidden;
+    position: relative;
+    min-height: 100vh;
+}
+
+/* =========================================
+   IIAC THEMED BACKGROUND (Radar & Flight paths)
+========================================= */
+.aviation-path-bg {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: -1;
+    background-image: 
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 50px 50px;
+}
+
+.radar-curves {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200vw; height: 200vw;
+    border-radius: 50%;
+    background: repeating-radial-gradient(
+        transparent,
+        transparent 150px,
+        rgba(66, 165, 245, 0.05) 151px,
+        rgba(66, 165, 245, 0.02) 155px
+    );
+    z-index: -2;
+    pointer-events: none;
+}
+
+/* =========================================
+   TYPOGRAPHY
+========================================= */
+.hero-name {
+    font-family: var(--font-main);
+    font-size: 4.5rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-bottom: 0.5rem;
+    line-height: 1;
+    text-transform: uppercase;
+}
+
+h1, h2, h3, h4 {
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+}
+
+h3 {
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+}
+
+p {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    margin-bottom: 1.25rem;
+}
+
+strong {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+a {
+    text-decoration: none;
+    color: var(--text-primary);
+}
+
+.highlight {
+    color: var(--accent-sky);
+    text-shadow: 0 0 25px rgba(66, 165, 245, 0.4);
+}
+
+.badge {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: rgba(66, 165, 245, 0.1);
+    color: var(--accent-sky);
+    border: 1px solid var(--card-border-bottom);
+    border-radius: 30px;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+}
+
+/* =========================================
+   LAYOUT UTILS
+========================================= */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.9rem 1.5rem;
+    font-weight: 600;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all var(--transition-fast);
+    gap: 0.5rem;
+}
+
+.btn-full { width: 100%; margin-bottom: 0.8rem; }
+
+.primary-btn {
+    background: var(--accent-sky);
+    color: var(--bg-navy) !important;
+    border: 1px solid var(--accent-sky);
+    box-shadow: 0 0 15px var(--accent-glow);
+}
+
+.primary-btn:hover {
+    background: rgba(66, 165, 245, 0.1);
+    color: var(--accent-sky) !important;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 20px rgba(66, 165, 245, 0.4);
+}
+
+.primary-btn.outline {
+    background: transparent;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--text-muted);
+    box-shadow: none;
+}
+.primary-btn.outline:hover {
+    color: var(--accent-sky) !important;
+    border-color: var(--accent-sky);
+    box-shadow: 0 0 15px var(--accent-glow);
+}
+
+/* =========================================
+   NAVBAR
+========================================= */
+.navbar { padding: 2rem 0; margin-bottom: 2rem; }
+.nav-container { display: flex; justify-content: space-between; align-items: center; }
+.logo { font-family: var(--font-mono); font-size: 1.4rem; }
+.logo span { color: var(--accent-sky); }
+.nav-links { list-style: none; display: flex; gap: 1.5rem; }
+.nav-links li a { font-size: 1rem; font-weight: 500; transition: color var(--transition-fast); }
+.nav-links li a:hover { color: var(--accent-sky); }
+
+/* =========================================
+   BENTO GRID (The Core Layout)
+========================================= */
+.bento-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: minmax(180px, auto);
+    gap: 20px;
+    padding-bottom: 5rem;
+}
+
+/* Glassmorphism Refinement - 1px distinct borders */
+.bento-box {
+    background: var(--card-bg);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    /* The 1px real glass feel border */
+    border-top: 1px solid var(--card-border-top);
+    border-left: 1px solid var(--card-border-top);
+    border-right: 1px solid var(--card-border-bottom);
+    border-bottom: 1px solid var(--card-border-bottom);
+    border-radius: 20px;
+    padding: 2.2rem;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.glow-hover {
+    transition: transform var(--transition-smooth), border-color var(--transition-fast), box-shadow var(--transition-smooth);
+}
+
+.glow-hover:hover {
+    transform: translateY(-5px);
+    border-color: rgba(66, 165, 245, 0.6);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(66, 165, 245, 0.15);
+}
+
+/* Inner highlight for glass */
+.glow-hover::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle at top right, rgba(255, 255, 255, 0.08) 0%, transparent 60%);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+}
+.glow-hover:hover::before { opacity: 1; }
+
+.bento-header {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Bento Box Sizes */
+.bento-hero { grid-column: span 2; grid-row: span 2; padding: 3rem; justify-content: center; }
+.hero-title { font-size: 2.4rem; margin-bottom: 1.5rem; z-index: 2; }
+.hero-subtitle { font-size: 1.15rem; max-width: 90%; z-index: 2; }
+.hero-bg-overlay {
+    position: absolute; top: 0; left: 40%; width: 60%; height: 100%;
+    background-size: cover; background-position: right center; opacity: 0.15; z-index: 1;
+    mask-image: linear-gradient(to right, transparent, black);
+    -webkit-mask-image: linear-gradient(to right, transparent, black);
+}
+
+.bento-infra { grid-column: span 1; grid-row: span 2; }
+.bento-terminal { grid-column: span 2; grid-row: span 1; padding: 0; background: var(--terminal-bg); border-top-color: rgba(255,255,255,0.05); }
+
+/* Project Bento */
+.bento-project {
+    grid-column: span 3;
+    grid-row: span 1;
+    display: flex;
+    flex-direction: row;
+    padding: 0;
+    margin-top: 10px;
+}
+.project-content {
+    flex: 1;
+    padding: 2.5rem;
+    z-index: 2;
+    display: flex; flex-direction: column;
+}
+.project-image-bg {
+    flex: 1; 
+    min-width: 300px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+.project-image-bg::before {
+    content: ''; position: absolute; top:0; left:0; width: 100%; height: 100%;
+    background: linear-gradient(to right, var(--card-bg) 0%, transparent 50%);
+}
+
+.bento-values { grid-column: span 1; }
+.bento-goals { grid-column: span 1; }
+.bento-contact { grid-column: span 1; justify-content: center; }
+
+/* =========================================
+   CORE INFRASTRUCTURE & TOOLTIPS
+========================================= */
+.infra-list {
+    list-style: none; display: flex; flex-direction: column; gap: 1rem; margin-top: auto;
+}
+.infra-list li {
+    display: flex; justify-content: space-between; align-items: center;
+    background: rgba(255,255,255,0.03); padding: 0.8rem 1rem;
+    border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);
+    position: relative;
+}
+.infra-info { display: flex; flex-direction: column; gap: 2px; }
+.infra-name { font-family: var(--font-mono); font-size: 0.95rem; font-weight: 500; cursor: default; }
+.infra-date { font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono); }
+.infra-status.active { background: rgba(66, 165, 245, 0.15); color: var(--accent-sky); border: 1px solid rgba(66, 165, 245, 0.3); padding: 0.2rem 0.5rem; font-size: 0.75rem; border-radius: 4px; font-family: var(--font-mono); }
+
+/* Custom Tooltip */
+.has-tooltip { position: relative; }
+.has-tooltip::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 120%; left: 50%; transform: translateX(-50%) translateY(10px);
+    background: #0f1c2d; color: var(--text-primary);
+    padding: 8px 12px; border-radius: 8px; font-size: 0.85rem; font-family: var(--font-main);
+    white-space: nowrap; pointer-events: none; opacity: 0;
+    border: 1px solid var(--accent-sky);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5), 0 0 10px rgba(66, 165, 245, 0.2);
+    transition: opacity 0.3s, transform 0.3s;
+    z-index: 10;
+}
+.has-tooltip:hover::after { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* =========================================
+   TERMINAL UI DENSITY
+========================================= */
+.terminal-header { background: #1A1F2A; padding: 0.8rem 1.5rem; display: flex; align-items: center; border-bottom: 1px solid rgba(0,0,0,0.5); }
+.mac-buttons { display: flex; gap: 8px; }
+.mac-buttons span { width: 12px; height: 12px; border-radius: 50%; }
+.mac-buttons .close { background: #FF5F56; } .mac-buttons .minimize { background: #FFBD2E; } .mac-buttons .maximize { background: #27C93F; }
+.terminal-title { margin-left: auto; margin-right: auto; font-family: var(--font-mono); font-size: 0.85rem; color: #6A7989; padding-right: 36px; }
+
+.terminal-body { padding: 1.5rem 2rem; font-family: var(--font-mono); font-size: 1.05rem; min-height: 250px; display: flex; flex-direction: column; }
+.prompt { color: #4CAF50; margin-right: 0.8rem; }
+.cursor { display: inline-block; width: 10px; background-color: var(--text-primary); animation: blink 1s step-end infinite; }
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+.system-log span { color: var(--accent-sky); font-weight: bold;}
+.sys-log { font-size: 0.9rem; color: #A3B1C6; margin-bottom: 0.4rem; font-family: var(--font-mono); }
+.sys-log span { color: #FFBD2E; }
+
+.tech-icons-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-top: 1.5rem; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 1rem; }
+.tech-item { display: flex; align-items: center; gap: 10px; }
+.tech-item i { font-size: 1.8rem; }
+.tech-item span { font-size: 0.9rem; color: var(--text-primary); }
+
+.hidden { display: none; }
+
+/* =========================================
+   GOALS SECTION
+========================================= */
+.goal-item { display: flex; gap: 1rem; margin-bottom: 1rem; }
+.goal-icon { font-size: 1.5rem; flex-shrink: 0; }
+
+/* =========================================
+   ANIMATIONS 
+========================================= */
+.animate-on-scroll { opacity: 0; transform: translateY(30px) scale(0.98); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+.animate-on-scroll.visible { opacity: 1; transform: translateY(0) scale(1); }
+
+/* =========================================
+   RESPONSIVE DESIGN (Crucial for Bento)
+========================================= */
+@media (max-width: 1024px) {
+    .bento-container { grid-template-columns: repeat(2, 1fr); }
+    .bento-hero { grid-column: span 2; }
+    .bento-infra { grid-column: span 1; grid-row: span 1; }
+    .bento-terminal { grid-column: span 2; }
+    .bento-project { grid-column: span 2; flex-direction: column;}
+    .project-image-bg { height: 200px; width: 100%; border-top: 1px solid rgba(255,255,255,0.05); }
+    .project-image-bg::before { background: linear-gradient(to bottom, var(--card-bg) 0%, transparent 50%); }
+}
+
+@media (max-width: 768px) {
+    .bento-container { grid-template-columns: 1fr; display: flex; flex-direction: column; gap: 20px;}
+    .bento-box { width: 100%; } /* Ensure full width on mobile stack */
+    .hero-name { font-size: 3.2rem; }
+    .hero-title { font-size: 2rem; }
+    .terminal-body { min-height: 180px; }
+    .tech-icons-grid { grid-template-columns: 1fr; }
+    
+    /* Project adjustments for mobile */
+    .bento-project { flex-direction: column; }
+    .project-image-bg { min-height: 200px; width: 100%; }
+    
+    /* Mobile tooltips adjustment */
+    .has-tooltip::after { left: auto; right: 0; transform: translateY(10px); }
+    .has-tooltip:hover::after { transform: translateY(0); }
+}
